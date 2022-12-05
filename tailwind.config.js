@@ -27,7 +27,15 @@ module.exports = {
         padding: '1rem',
       },
       colors: {
-        backgrop: 'rgba(0,0,0,0.3)'
+        backgroundColor: '#222831',
+        textColor: '#222831',
+        headerColor: '#30475E',
+        wrapperColor: '#DDDDDD',
+        buttonColor: {
+          main: 'hsl(var(--buttonColor-primary) / <alpha-value>)',
+          hover: 'hsl(var(--buttonColor-hover) / <alpha-value>)',
+        },
+        backgropColor: 'rgba(0,0,0,0.3)'
       }
     },
   },

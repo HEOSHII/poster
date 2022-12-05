@@ -51,7 +51,7 @@ export default function MyPosts () {
                         console.log(userPost.id)
                         return(
                             <Message {...userPost} key={userPost.id}>
-                                <div className="absolute top-2 right-3 flex justify-center items-center space-x-1">
+                                <div className="flex justify-center items-center space-x-1">
                                     <Link href={{ pathname:'/post', query: userPost }}>
                                         <button title="Edit" className="text-md flex items-center justify-center transition-all text-green-500 hover:text-green-400">
                                             <MdModeEdit size={20}/>
@@ -81,7 +81,7 @@ export default function MyPosts () {
                 }
             </ul>
             {deletePopup && 
-                <div className="absolute bg-backgrop w-screen h-screen top-0 left-0 flex justify-center items-center z-50 backdrop-blur-sm">
+                <div className="absolute bg-backgropColor w-screen h-screen top-0 left-0 flex justify-center items-center z-50 backdrop-blur-sm">
                     <div className="bg-white shadow-sm p-4 rounded">
                         <p className="mb-5">Are you sure that you want to delete this post?😰</p> 
                         <div className="flex w-max mx-auto space-x-10">

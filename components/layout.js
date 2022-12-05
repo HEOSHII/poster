@@ -3,7 +3,7 @@ import Nav from "./nav";
 
 export default function Layout({children}) {
     return (
-        <div className="w-full font-mulish">
+        <div className="w-full h-screen font-mulish'">
             <Head>
                  <title>POSTERS</title>
             </Head>

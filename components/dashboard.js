@@ -5,7 +5,9 @@ import { useEffect } from "react";
 import Link from "next/link";
   
 
-export default function Dashboard() {
+export default function Dashboard({isOpened}) {
+    console.log(isOpened)
+
     const route = useRouter();
     const [user,loading] = useAuthState(auth);
 
@@ -27,17 +29,14 @@ export default function Dashboard() {
     }
 
     return(
-        <div className="hidden absolute bg-white left-0 top-[calc(100%-5px)] w-full shadow-md rounded-b" id='dashboard'>
-            <Link href="/">
-                <button className="w-full hover:bg-gray-100 py-2 px-3 text-right">Posts</button>
-            </Link>
+        <div className={`${!isOpened && "hidden bg-wrapperColor"} absolute bg-white left-0 top-[calc(100%-5px)] w-full shadow-md rounded-b group-hover:bg-white`} id='dashboard'>
             <Link href="/post">
-                <button className="w-full hover:bg-gray-100 py-2 px-3 text-right">Add post</button>
+                <button className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">Add post</button>
             </Link>
             <Link href='/myPosts'>
-                <h1 className="w-full hover:bg-gray-100 py-2 px-3 text-right">My posts</h1>
+                <h1 className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">My posts</h1>
             </Link>
-            <button className="w-full hover:bg-gray-100 py-2 px-3 text-right rounded-b" onClick={signOut}>Leave</button>
+            <button className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg rounded-b " onClick={signOut}>Sign out</button>
         </div>
     )
 }

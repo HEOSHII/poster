@@ -31,12 +31,12 @@ export default function login() {
     }
 
     return (
-        <div className="border bg-slate-50 border-gray-100 text-center rounded p-4 mt-10">
-            <div className="bg-slate-50">
-                <h3 className="text-xl font-bold">Sign in with:</h3>
-                <div className="flex justify-center bg-white">
-                    <button onClick={GoogleLogin} className="w-full shadow-md p-2 rounded transition-all hover:shadow-lg hover:scale-[1.01] active:scale-[0.99]">
-                        <FcGoogle className="mx-auto" size={50}/>
+        <div className="border w-1/2 mx-auto bg-wrapperColor border-gray-100 text-center rounded p-4 mt-10">
+            <div>
+                <h3 className="text-xl font-bold mb-2">Sign in with:</h3>
+                <div className="flex justify-center bg-white rounded">
+                    <button onClick={GoogleLogin} className="w-full flex justify-center items-center shadow-md py-3 rounded text-xl transition-all hover:shadow-lg hover:scale-[1.01] active:scale-[0.99]">
+                        <FcGoogle size={30}/>oogle
                     </button>
                 </div>
             </div>

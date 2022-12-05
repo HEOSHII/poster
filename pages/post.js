@@ -71,13 +71,13 @@ export default function Post() {
 
     return(
         <div>
-            <form className="shadow-md p-5" onSubmit={submitForm}>
-                <h1 className="text-center font-bold text-xl mb-5 uppercase">
+            <form className="shadow-md p-5 bg-headerColor rounded" onSubmit={submitForm}>
+                <h1 className="text-center font-bold text-xl mb-5 uppercase text-wrapperColor">
                     {post.hasOwnProperty('id') ? 'Update' : 'Create'} Post:
                 </h1>
                 <div className="flex flex-col">
                     <input 
-                        className={`border rounded mb-2 p-2 placeholder:text-gray-300 ${submittedOnce && !post.title ? 'border-red-400 outline-red-400' : null}`} 
+                        className={`bg-backgroundColor shadow-md rounded mb-2 p-2 text-wrapperColor placeholder:text-slate-200 placeholder:opacity-20 outline-solid outline-neutral-500 focus:outline-1 ${submittedOnce && !post.title ? 'border border-red-500' : null}`} 
                         type="text" 
                         maxLength={80}
                         placeholder="Title"
@@ -86,17 +86,17 @@ export default function Post() {
                         >
                     </input>
                     <textarea 
-                        className={`border rounded p-2 resize-none placeholder:text-gray-300 ${submittedOnce && !post.description || post.description.length > 300 ? 'border-red-400 outline-red-400' : null}`}
+                        className={`bg-backgroundColor shadow-md rounded mb-2 p-2 text-wrapperColor placeholder:text-slate-100 placeholder:opacity-20 outline-solid outline-neutral-500 focus:outline-1 resize-none ${submittedOnce && !post.description || post.description.length > 300 ? 'border border-red-500' : null}`}
                         placeholder="Description"
                         value={post.description}
-                        rows='6'
+                        rows='10'
                         onChange={event => setPost({...post, description: event.target.value})}>
                     </textarea>
-                    <div className="mb-2 h-3">
+                    <div className="mb-2 h-3 text-wrapperColor">
                         { post.description.length ? (<p className={`text-[10px] ${ post.description.length > 300 ? 'text-red-600' : '' }`}> {post.description.length}/300</p>) : '' }
                     </div>
                     <button 
-                        className="bg-slate-200 hover:bg-slate-300 font-bold rounded mx-auto w-full h-button transition-all uppercase disabled:opacity-20 disabled:cursor-not-allowed" 
+                        className="bg-buttonColor-main shadow-md hover:bg-buttonColor-hover text-white font-bold rounded mx-auto w-full h-button transition-all uppercase disabled:opacity-20 disabled:cursor-not-allowed" 
                         type="submit" 
                         disabled={submittedOnce && (!post.title || !post.description || post.description.length > 300)}>
                             {post.hasOwnProperty('id') ? 'Update Post' : 'Post It!'}

@@ -8,7 +8,7 @@ export default function Document() {
         <link rel="preconnect" href="https://fonts.gstatic.com"    />
         <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@200;400;700&display=swap" rel="stylesheet" />
       </Head>
-      <body className=' text-emerald-900'>
+      <body className=' text-textColor  bg-backgroundColor'>
         <Main />
         <NextScript />
       </body>

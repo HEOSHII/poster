@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --buttonColor-primary: 0deg 65% 60%;
+    --buttonColor-hover: 0deg 65% 55%;
+  }
+}
+
+* {
+  outline-width: 0;
+}
