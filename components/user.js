@@ -11,7 +11,7 @@ export default function User({ user }) {
         <div>
             <div className="flex items-center gap-5 cursor-pointer" onClick={()=>setDashboardOpened(!dashboardOpened)}>
                 <div className={`relative z-20 ${dashboardOpened ? 'bg-white' : 'bg-wrapperColor'} rounded flex items-center gap-3 px-4 transition-shadow shadow-sm hover:shadow-md hover:bg-white group h-button`}>
-                    <p className="w-[min-content] leading-3 font-bold pointer-events-none">{userName}</p>
+                    <p className="w-[min-content] leading-3 font-bold pointer-events-none text-lg">{userName}</p>
                     <img className="rounded-full h-9 pointer-events-none" src={user.photoURL} />
                     <Dashboard isOpened={dashboardOpened} />
                 </div>

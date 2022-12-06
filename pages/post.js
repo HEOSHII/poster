@@ -71,13 +71,13 @@ export default function Post() {
 
     return(
         <div>
-            <form className="shadow-md p-5 bg-headerColor rounded" onSubmit={submitForm}>
-                <h1 className="text-center font-bold text-xl mb-5 uppercase text-wrapperColor">
+            <form className="shadow-md p-5 bg-wrapperColor rounded" onSubmit={submitForm}>
+                <h1 className="text-center font-bold text-xl mb-5 uppercase">
                     {post.hasOwnProperty('id') ? 'Update' : 'Create'} Post:
                 </h1>
                 <div className="flex flex-col">
                     <input 
-                        className={`bg-backgroundColor shadow-md rounded mb-2 p-2 text-wrapperColor placeholder:text-slate-200 placeholder:opacity-20 outline-solid outline-neutral-500 focus:outline-1 ${submittedOnce && !post.title ? 'border border-red-500' : null}`} 
+                        className={`bg-white shadow-md rounded mb-2 p-2 placeholder:opacity-20 outline-solid focus:outline-1 ${submittedOnce && !post.title ? 'border border-red-500 outline-red-500' : 'outline-headerColor'}`} 
                         type="text" 
                         maxLength={80}
                         placeholder="Title"
@@ -86,7 +86,7 @@ export default function Post() {
                         >
                     </input>
                     <textarea 
-                        className={`bg-backgroundColor shadow-md rounded mb-2 p-2 text-wrapperColor placeholder:text-slate-100 placeholder:opacity-20 outline-solid outline-neutral-500 focus:outline-1 resize-none ${submittedOnce && !post.description || post.description.length > 300 ? 'border border-red-500' : null}`}
+                        className={`bg-white shadow-md rounded mb-2 p-2 placeholder:opacity-20 outline-solid focus:outline-1 resize-none ${submittedOnce && !post.description || post.description.length > 300 ? 'border border-red-500 outline-red-500' : 'outline-headerColor'}`}
                         placeholder="Description"
                         value={post.description}
                         rows='10'

@@ -59,19 +59,19 @@ export default function Details() {
                         <h3 className="font-bold text-xl text-center text-white">Comments</h3>
                         <ul className="rounded">
                             {allComments?.map(comment => 
-                                <li className="flex flex-col border-b border-backgroundColor py-3 px-4 bg-white first:rounded-t" key={comment.time}> 
-                                    <div className="flex items-center opacity-70 text-sm">
+                                <li className="flex flex-col py-1 px-4 bg-white first:rounded-t" key={comment.time}> 
+                                    <div className="flex items-center opacity-70 text-sm mb-2">
                                         <img className="rounded-full h-[25px]" src={comment.avatar} alt="avatar" />
                                         <p className="ml-2">{comment.userName}:</p>
                                     </div>
-                                    <p className="italic ml-10 text-lg font-bold"> {comment.comment} </p>
+                                    <p className="italic text-lg font-bold font-comment border-t border-b px-4 py-2">– {comment.comment} </p>
                                 </li>)
                             }
                             {!allComments?.length && <p className="font-bold text-center text-white">No comments, yet! Leave first one!</p>}
                         </ul>
                     </div>
                     <div className="flex w-full justify-between shadow-md rounded-b">
-                        <input className="bg-white text-backgroundColor w-full py-2 px-5 rounded-b rounded-r-none placeholder:opacity-60 placeholder:text-center" max={80} type="text" value={comment} placeholder="Have something to say?🤔" onChange={(e)=>setComment(e.target.value)} />
+                        <input className="bg-headerColor text-white w-full py-2 px-5 rounded-b rounded-r-none placeholder:opacity-60 placeholder:text-center" max={80} type="text" value={comment} placeholder="Have something to say?🤔" onChange={(e)=>setComment(e.target.value)} />
                         <button onClick={submitComment} className="font-bold px-5 rounded-b rounded-l-none transition-all bg-buttonColor-main text-white hover:bg-buttonColor-hover">Comment</button>
                     </div>
                 </motion.div>

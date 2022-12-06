@@ -18,6 +18,7 @@ module.exports = {
       },
       fontFamily: {
         mulish: "Mulish",
+        comment: 'Open Sans'
       },
       blur: {
         sm: '2px'

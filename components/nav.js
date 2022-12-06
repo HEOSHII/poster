@@ -8,7 +8,7 @@ export default function Nav() {
     return ( <header className="w-screen bg-headerColor py-3 shadow-sm">
                 <nav className={`flex ${user ? 'justify-between' : 'justify-center'} items-center container`}>
                     <Link href="/">
-                        <button className="bg-wrapperColor px-5 rounded shadow-sm text-xl font-bold h-button hover:bg-white">POSTS</button>
+                        <button className="bg-buttonColor-main px-5 rounded shadow-sm text-xl font-bold h-button text-white hover:bg-buttonColor-hover">POSTS</button>
                     </Link>
                     {user && (<User user={user} />)}
                 </nav>
