@@ -4,16 +4,14 @@ import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/fi
 import { auth, db } from "../utils/firebase"
 import { useRouter } from "next/router"
 import { toast } from "react-toastify"
+import { motion, AnimatePresence } from "framer-motion";
+import { toastOptions } from "../utils/variables"
 
-export const toastOptions = {
-    position: toast.POSITION.TOP_CENTER,
-    autoClose: 800,
-}; 
 
 export default function Post() {
     
     //Form state
-    const emptyPost = {title:'', description: ''}
+    const emptyPost = {title:'', description: '', comments: []}
     const [post, setPost] = useState(emptyPost)
     const [submittedOnce, setSubmittedOnce] = useState(false);
     //AUTH
@@ -64,14 +62,14 @@ export default function Post() {
             userName: user.displayName,
             timestamp: serverTimestamp()
         });
+        toast.success('Post created succesfuly!', toastOptions);
         setPost(emptyPost);
-        toast.success('The post was born! Nice! 👶🏻', toastOptions);
         return route.push('/');
     }    
 
     return(
-        <div>
-            <form className="shadow-md p-5 bg-wrapperColor rounded" onSubmit={submitForm}>
+        <AnimatePresence>
+            <motion.form initial={{ y:30, opacity: 0 }} animate={{ y:0, opacity: 1 }} className="shadow-md p-5 bg-wrapperColor rounded" onSubmit={submitForm}>
                 <h1 className="text-center font-bold text-xl mb-5 uppercase">
                     {post.hasOwnProperty('id') ? 'Update' : 'Create'} Post:
                 </h1>
@@ -102,7 +100,8 @@ export default function Post() {
                             {post.hasOwnProperty('id') ? 'Update Post' : 'Post It!'}
                     </button>
                 </div>
-            </form>
-        </div>
+            </motion.form>
+        </AnimatePresence>
+            
     )
 } 

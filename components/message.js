@@ -2,7 +2,7 @@
 export default function Message({children, avatar, title, description, userName}) {
     return(
             <div 
-                className=" animate-show relative border bg-wrapperColor hover:bg-white rounded pt-3 pb-3 px-6 shadow-sm z-0 group cursor-pointer">
+                className=" border bg-wrapperColor rounded pt-3 pb-3 px-6 shadow-sm z-0 group cursor-pointer">
                 <div className="pb-3 mb-2 border-b border-textColor">
                     <h3 className="font-bold text-2xl mb-1">{title}</h3>
                     <p>{description}</p>

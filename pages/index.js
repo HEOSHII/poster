@@ -6,7 +6,8 @@ import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth"
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-
+import Controlls from "../components/controlls";
+import Comments from "../components/comments";
 
 export const variants = {
   ul: {
@@ -23,6 +24,7 @@ export const variants = {
     show: { y: 0, opacity: 1 }
   }
 }
+
 
 export default function Home() {
   //State with all posts
@@ -52,8 +54,6 @@ export default function Home() {
     getPosts();
   },[]);
 
-
-
   return (
     <AnimatePresence>
       <motion.ul 
@@ -64,12 +64,11 @@ export default function Home() {
         {
           allPosts.length 
           ? allPosts.map((post, index) => (
-            <motion.li variants={variants.li} transition={{ delay: index * 0.1 }}>
-              <Link href={{ pathname:`/${post.id}`, query: {...post} }} key={post.id}>
+            <motion.li variants={variants.li} transition={{ delay: index * 0.1 }} key={post.id}>
                 <Message {...post}  >
-                    <button className="transition-all opacity-50 group-hover:underline group-hover:opacity-100">{post.comments ? post.comments.length : '0'} comments</button>
+                    <Comments {...post} />
+                    {post.user === auth.currentUser.uid && <Controlls {...post} />}
                 </Message>
-              </Link>
             </motion.li>
           )) 
           : <p className="p-3 shadow-sm text-center">

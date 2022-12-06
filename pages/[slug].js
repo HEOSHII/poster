@@ -3,7 +3,7 @@ import Message from "../components/message"
 import { useState, useEffect } from "react"
 import { auth, db } from "../utils/firebase"
 import { toast } from "react-toastify"
-import { toastOptions } from "./post"
+import { toastOptions } from "../utils/variables"
 import { arrayUnion, doc, onSnapshot, Timestamp, updateDoc } from "firebase/firestore"
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -38,7 +38,7 @@ export default function Details() {
     const getComments = async () => {
         const docRef = doc(db,'posts',routePost.id);
         const unsubscribe = onSnapshot(docRef, (snapshot)=>{
-            setAllComments(snapshot.data().comments);
+            snapshot.data() && setAllComments(snapshot.data().comments);
         });
         return unsubscribe;
     }
@@ -56,7 +56,10 @@ export default function Details() {
                 </Link>
                 <motion.div initial={{ y: 10, opacity: 0 }} animate={{ y:0, opacity: 1 }} transition={{ delay: 0.1 }} className="w-full mt-2 shadow-sm">
                     <div>
-                        <h3 className="font-bold text-xl text-center text-white">Comments</h3>
+                        {allComments?.length 
+                            ? <h3 className="font-bold text-xl text-center text-white">Comments</h3> 
+                            : <p className="font-bold text-center text-white">No comments, yet! Leave first one!</p> 
+                        }
                         <ul className="rounded">
                             {allComments?.map(comment => 
                                 <li className="flex flex-col py-1 px-4 bg-white first:rounded-t" key={comment.time}> 
@@ -67,7 +70,6 @@ export default function Details() {
                                     <p className="italic text-lg font-bold font-comment border-t border-b px-4 py-2">– {comment.comment} </p>
                                 </li>)
                             }
-                            {!allComments?.length && <p className="font-bold text-center text-white">No comments, yet! Leave first one!</p>}
                         </ul>
                     </div>
                     <div className="flex w-full justify-between shadow-md rounded-b">
