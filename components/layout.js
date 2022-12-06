@@ -8,7 +8,7 @@ export default function Layout({children}) {
                  <title>POSTERS</title>
             </Head>
             <Nav />
-            <main className="container p-3">{children}</main>
+            <main className="container py-5">{children}</main>
         </div>
     );
 }

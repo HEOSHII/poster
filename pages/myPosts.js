@@ -8,11 +8,13 @@ import { MdDelete, MdModeEdit } from "react-icons/md";
 import Link from "next/link";
 import { toast } from "react-toastify"
 import { toastOptions } from "./post";
+import { variants } from "./index";
+
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function MyPosts () {
     const [userPosts, setUserPosts] = useState([]);
-    const [deletePopup, setDeletePopup] = useState(false);
-    const [deletePostID, setDeletePostID] = useState(null);
+    const [deletePostID, setDeletePostID] = useState(0);
     const [user, loading] = useAuthState(auth);
     const route = useRouter();
     
@@ -30,42 +32,45 @@ export default function MyPosts () {
         getData()
     }, [user, loading]);
 
-    const openDeletePopup = id => {
-        setDeletePopup(true);
-        setDeletePostID(id);
-    }
-
     const deletePost = async id => {
         const decRef = doc(db,'posts',id);
         await deleteDoc(decRef);
         toast.success('Bye, post...🧹', toastOptions)
-        setDeletePopup(false);
+        setDeletePostID(0);
     }
 
     return(
-        <div className="py-5">
-            <ul className="flex flex-col space-y-3">
+        <AnimatePresence>
+            <motion.ul 
+                variants={variants.ul}  
+                initial="hidden"
+                animate="show"
+                exit='hidden'
+                className="flex flex-col space-y-3">
                 {
                     userPosts.length
-                    ? userPosts.map(userPost => {
-                        console.log(userPost.id)
+                    ? userPosts.map((userPost, index) => {
                         return(
-                            <Message {...userPost} key={userPost.id}>
-                                <div className="flex justify-center items-center space-x-1">
-                                    <Link href={{ pathname:'/post', query: userPost }}>
-                                        <button title="Edit" className="text-md flex items-center justify-center transition-all text-green-500 hover:text-green-400">
-                                            <MdModeEdit size={20}/>
-                                        </button>
-                                    </Link>
-                                    <button 
-                                        title="Delete" 
-                                        className="group text-md flex items-center justify-center transition-all  text-red-500 hover:text-red-400"
-                                        onClick={() => openDeletePopup(userPost.id)} 
-                                    >
-                                        <MdDelete size={20}/>
-                                    </button>
-                                </div>
-                            </Message>
+                                <motion.li  
+                                variants={variants.li} transition={{ delay: index*0.1 }}>
+                                    <Message {...userPost} key={userPost.id}>
+                                        <div className="flex justify-center items-center space-x-1">
+                                            <Link href={{ pathname:'/post', query: userPost }}>
+                                                <button title="Edit" className="text-md flex items-center justify-center transition-all text-green-500 hover:text-green-400">
+                                                    <MdModeEdit size={20}/>
+                                                </button>
+                                            </Link>
+                                            <button 
+                                                title="Delete" 
+                                                className="group text-md flex items-center justify-center transition-all  text-red-500 hover:text-red-400"
+                                                onClick={() => setDeletePostID(userPost.id)} 
+                                            >
+                                                <MdDelete size={20}/>
+                                            </button>
+                                        </div>
+                                    </Message>
+                                </motion.li>
+                            
                         )})
                     : <p className="p-3 shadow-sm text-center">
                         { loading 
@@ -77,27 +82,9 @@ export default function MyPosts () {
                                     </Link>
                                 </div> 
                         }
-                     </p>
+                    </p>
                 }
-            </ul>
-            {deletePopup && 
-                <div className="absolute bg-backgropColor w-screen h-screen top-0 left-0 flex justify-center items-center z-50 backdrop-blur-sm">
-                    <div className="bg-white shadow-sm p-4 rounded">
-                        <p className="mb-5">Are you sure that you want to delete this post?😰</p> 
-                        <div className="flex w-max mx-auto space-x-10">
-                            <button 
-                                className="border py-2 px-4 rounded bg-slate-100 font-bold" 
-                                onClick={() => setDeletePopup(false)}>
-                                    Back
-                            </button>
-                            <button 
-                                className="border py-2 px-4 rounded bg-red-500 font-bold text-white" 
-                                onClick={() => deletePost(deletePostID)}>
-                                    Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>}
-        </div>
+            </motion.ul>
+        </AnimatePresence>
     )
 }

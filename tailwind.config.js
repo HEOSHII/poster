@@ -36,7 +36,7 @@ module.exports = {
           hover: 'hsl(var(--buttonColor-hover) / <alpha-value>)',
         },
         backgropColor: 'rgba(0,0,0,0.3)'
-      }
+      },
     },
   },
   plugins: [],

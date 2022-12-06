@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import Dashboard from "./dashboard";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function User({ user }) {
     const [dashboardOpened, setDashboardOpened] = useState(false);
@@ -12,10 +13,20 @@ export default function User({ user }) {
                 <div className={`relative z-20 ${dashboardOpened ? 'bg-white' : 'bg-wrapperColor'} rounded flex items-center gap-3 px-4 transition-shadow shadow-sm hover:shadow-md hover:bg-white group h-button`}>
                     <p className="w-[min-content] leading-3 font-bold pointer-events-none">{userName}</p>
                     <img className="rounded-full h-9 pointer-events-none" src={user.photoURL} />
-                    <Dashboard isOpened={dashboardOpened}/>
+                    <Dashboard isOpened={dashboardOpened} />
                 </div>
             </div>
-            <div className={`${!dashboardOpened && 'pointer-events-none opacity-0'} backdrop-blur-sm absolute top-0 left-0 bg-backgropColor transition-all w-screen h-screen z-10`} onClick={() => setDashboardOpened(false)}></div>
+            <AnimatePresence>
+                {dashboardOpened && (
+                        <div 
+                            className="backdrop-blur-sm absolute top-0 left-0 bg-backgropColor transition-all w-screen h-screen z-10" 
+                            onClick={() => setDashboardOpened(false)}>
+                        </div>
+                    )
+                }
+            </AnimatePresence>
+
+            
         </div>
     )  
 }
