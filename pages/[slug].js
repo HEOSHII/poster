@@ -8,19 +8,41 @@ import { arrayUnion, doc, onSnapshot, Timestamp, updateDoc } from "firebase/fire
 
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link"
+import { useAuthState } from "react-firebase-hooks/auth"
 
 export default function Details() {
     const route = useRouter();
     const routePost = route.query;
+
+
+    useEffect(()=>{
+        if(!routePost.hasOwnProperty('id')) return route.push('/notFound');
+    },[]);
+
+    const [user,loading] = useAuthState(auth);
     const [comment, setComment] = useState('');
     const [allComments, setAllComments] = useState([]);
 
+
+
+    const checkUser = async () => {
+        if(loading) return;
+        if(!user) return route.push('/auth/login');
+      }
+
+    useEffect(()=>{
+        checkUser();
+    },[user, loading]);
+
+    
+
+
     //Submit comment
     const submitComment = async () => {
-        //Check is user logget
         if(!auth.currentUser) return route.push('/auth/loggin');
         if(!comment) return toast.error('You need to type something!🤬',toastOptions);
 
+        if(!routePost.id) return await route.push('/');
         const docRef = doc(db, 'posts', routePost.id);
         await updateDoc(docRef, {
             ...routePost, 
@@ -35,7 +57,7 @@ export default function Details() {
         });
         setComment('');
     }
-
+    
     //Get Comments
     const getComments = async () => {
         const docRef = doc(db,'posts',routePost.id);
@@ -46,7 +68,8 @@ export default function Details() {
     }
 
     useEffect(()=>{
-        // if(!route.isReady) return;
+        if(!route.isReady) return;
+        
         getComments();
     },[route.query]);
 
@@ -57,7 +80,6 @@ export default function Details() {
         e.target.style.height = (e.target.scrollHeight)+"px"
     }
 
-    console.log(allComments)
 
     return(
         <motion.ul initial={{ y: 10, opacity: 0 }} animate={{ y:0, opacity: 1 }}>

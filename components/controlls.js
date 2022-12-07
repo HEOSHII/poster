@@ -39,15 +39,15 @@ export default function Controlls({...post}) {
                         <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} key={'popup'} className="fixed top-0 left-0 z-30 w-screen h-screen bg-backgropColor backdrop-blur-sm flex justify-center items-center"
                             onClick={()=>setDeletePostID('')}>
                                 <motion.div 
-                                    initial={{opacity:0, x:100}} 
-                                    animate={{opacity:1, x:0}} 
-                                    exit={{opacity:0, x:100}} 
+                                    initial={{opacity:0, y:20}} 
+                                    animate={{opacity:1, y:0}} 
+                                    exit={{opacity:0, y:20}} 
                                     transition={{duration:0.2}}
                                     key={'buttons'}  
                                     className="bg-wrapperColor p-10 rounded shadow-md" 
                                     onClick={(e)=>e.stopPropagation()}>
 
-                                    <p className="font-bold mb-6">Are you sure that you wanna to remove this post?</p>
+                                    <p className="font-bold mb-6">Are you sure that you wanna to remove post <strong>{post.title}</strong>?</p>
                                     <div className="flex justify-center space-x-10 font-bold"  >
                                         <button className="shadow-md rounded bg-white px-5 py-2" onClick={()=>setDeletePostID('')}>BACK</button>
                                         <button className="shadow-md rounded bg-delete-primary hover:bg-delete-hover text-white px-5 py-2" onClick={() => deletePost(deletePostID)}>DELETE</button>

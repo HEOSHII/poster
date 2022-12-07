@@ -13,11 +13,10 @@ export default function Home() {
   const [allPosts, setAllPosts] = useState([]);
   const [user, loading] = useAuthState(auth);
   const route = useRouter();
-  const routedUserID = Object.keys(route.query)[0] ;
-  console.log(routedUserID);
+  const routedUserID = Object.keys(route.query)[0];
 
   const checkUser = async () => {
-    if(!user) return route.push('/auth/login');
+    if(!user) return await route.push('/auth/login');
   }
 
   useEffect(()=>{
@@ -38,6 +37,7 @@ export default function Home() {
   }
 
   useEffect(()=>{
+    if(!route.isReady) return;
     getPosts();
   },[route.query]);
 
@@ -54,14 +54,13 @@ export default function Home() {
               <motion.li  
                 initial={ {y: 10, opacity: 0} }
                 animate={ {y: 0, opacity: 1} }
-                // exit={{y: -10, opacity: 0}}
                 transition={{ 
                   delay: index * 0.1 
                 }} 
                 key={post.id}>
                   <Message {...post}  >
                       <Comments {...post} />
-                      {post.user === auth.currentUser.uid && <Controlls {...post} />}
+                      {post?.user === auth.currentUser.uid && <Controlls {...post} />}
                   </Message>
               </motion.li>
             )) 

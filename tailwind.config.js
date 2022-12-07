@@ -28,13 +28,13 @@ module.exports = {
         padding: '1rem',
       },
       colors: {
-        backgroundColor: '#3F4E4F',
-        textColor: '#2C3639',
-        headerColor: '#2C3639',
-        wrapperColor: '#DCD7C9',
+        backgroundColor: '#B9B7BD',
+        textColor: '#868B8E',
+        headerColor: '#868B8E',
+        wrapperColor: '#EEEDE7',
         buttonColor: {
-          main: '#A27B5C',
-          hover: '#957255',
+          main: '#7cc2af',
+          hover: '#6fbca7',
         },
         backgropColor: 'rgba(0,0,0,0.3)',
         delete: {

@@ -4,6 +4,7 @@ import { useRouter } from "next/router"
 import { useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { TEXTS } from "../utils/variables";
 
 export default function Dashboard({isOpened}) {
     const route = useRouter();
@@ -32,15 +33,26 @@ export default function Dashboard({isOpened}) {
                     <motion.div 
                         initial={{ height: 0 }}
                         animate={{ height: 'auto' }}
-                        exit={{ height: 0 }}
-                        className={`bg-white  absolute overflow-hidden  left-0 top-[calc(100%-5px)] w-full shadow-md rounded-b `}>
+                        exit={{ height: 0, y: -5 }}
+                        className="bg-white absolute overflow-hidden left-[-0.5rem] top-[calc(100%-1px)] w-full shadow-md rounded-b">
+                        <Link href={{pathname: '/profile', query: user.uid }}>
+                            <p className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">
+                                {TEXTS.DASHBOARD.PROFILE}
+                            </p>
+                        </Link>
                         <Link href="/post">
-                            <button className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">Add post</button>
+                            <button className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">
+                                {TEXTS.DASHBOARD.NEW_POST}
+                            </button>
                         </Link>
                         <Link href={{pathname: '/', query: user.uid }}>
-                            <p className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">My posts</p>
+                            <p className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">
+                                {TEXTS.DASHBOARD.USER_POSTS}
+                            </p>
                         </Link>
-                        <button className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg rounded-b " onClick={signOut}>Sign out</button>
+                        <button className="w-full border-t hover:bg-wrapperColor py-3 px-3 text-right text-lg rounded-b " onClick={signOut}>
+                            {TEXTS.DASHBOARD.SIGN_OUT}
+                        </button>
                     </motion.div>
                 )}
         </AnimatePresence>
