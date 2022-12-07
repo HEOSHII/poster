@@ -28,17 +28,23 @@ module.exports = {
         padding: '1rem',
       },
       colors: {
-        backgroundColor: '#222831',
-        textColor: '#222831',
-        headerColor: '#30475E',
-        wrapperColor: '#DDDDDD',
+        backgroundColor: '#3F4E4F',
+        textColor: '#2C3639',
+        headerColor: '#2C3639',
+        wrapperColor: '#DCD7C9',
         buttonColor: {
-          main: 'hsl(var(--buttonColor-primary) / <alpha-value>)',
-          hover: 'hsl(var(--buttonColor-hover) / <alpha-value>)',
+          main: '#A27B5C',
+          hover: '#957255',
         },
-        backgropColor: 'rgba(0,0,0,0.3)'
+        backgropColor: 'rgba(0,0,0,0.3)',
+        delete: {
+          primary: 'hsl(var(--delete) / <alpha-value>)',
+          hover: 'hsl(var(--delete-hover) / <alpha-value>)',
+        }
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }

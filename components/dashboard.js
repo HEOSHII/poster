@@ -28,22 +28,21 @@ export default function Dashboard({isOpened}) {
 
     return(
         <AnimatePresence>
-            {isOpened && (
-                <motion.div 
-                    initial={{ height: 0 }}
-                    animate={{ height: 'auto' }}
-                    exit={{ height: 0 }}
-                    className={`absolute overflow-hidden bg-white left-0 top-[calc(100%-5px)] w-full shadow-md rounded-b group-hover:bg-white`}>
-                    <Link href="/post">
-                        <button className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">Add post</button>
-                    </Link>
-                    <Link href='/myPosts'>
-                        <h1 className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">My posts</h1>
-                    </Link>
-                    <button className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg rounded-b " onClick={signOut}>Sign out</button>
-                </motion.div>
-            )}
-            
+                {isOpened && (
+                    <motion.div 
+                        initial={{ height: 0 }}
+                        animate={{ height: 'auto' }}
+                        exit={{ height: 0 }}
+                        className={`bg-white  absolute overflow-hidden  left-0 top-[calc(100%-5px)] w-full shadow-md rounded-b `}>
+                        <Link href="/post">
+                            <button className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">Add post</button>
+                        </Link>
+                        <Link href={{pathname: '/', query: user.uid }}>
+                            <p className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">My posts</p>
+                        </Link>
+                        <button className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg rounded-b " onClick={signOut}>Sign out</button>
+                    </motion.div>
+                )}
         </AnimatePresence>
     )
 }

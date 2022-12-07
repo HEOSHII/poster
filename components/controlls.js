@@ -28,25 +28,34 @@ export default function Controlls({...post}) {
             </Link>
             <button 
                 title="Delete" 
-                className="group text-md flex items-center justify-center transition-all  text-red-500 hover:text-red-400"
+                className="group text-md flex items-center justify-center transition-all  text-delete-primary hover:text-delete-hover"
                 onClick={() => setDeletePostID(post.id)} 
             >
                 <MdDelete size={20}/>
             </button>
-            {deletePostID && (
-                <AnimatePresence>
-                    <motion.div initial={{opacity:0}} animate={{opacity:1}} className="fixed top-0 left-0 z-30 w-screen h-screen bg-backgropColor backdrop-blur-sm flex justify-center items-center"
-                        onClick={()=>setDeletePostID('')}>
-                        <motion.div initial={{opacity:0,y:50}} animate={{opacity:1,y:0}} transition={{delay:0.1}} className="bg-wrapperColor p-10 rounded shadow-md" onClick={(e)=>e.stopPropagation()}>
-                            <p className="font-bold mb-6">Are you sure that you wanna to remove this post?</p>
-                            <div className="flex justify-center space-x-10 font-bold"  >
-                                <button className="shadow-md rounded bg-white px-5 py-2" onClick={()=>setDeletePostID('')}>BACK</button>
-                                <button className="shadow-md rounded bg-buttonColor-main hover:bg-buttonColor-hover text-white px-5 py-2" onClick={() => deletePost(deletePostID)}>DELETE</button>
-                            </div>
-                        </motion.div>
-                    </motion.div> 
-                </AnimatePresence>
-            )}
+
+            <AnimatePresence>
+                {deletePostID && (
+                        <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} key={'popup'} className="fixed top-0 left-0 z-30 w-screen h-screen bg-backgropColor backdrop-blur-sm flex justify-center items-center"
+                            onClick={()=>setDeletePostID('')}>
+                                <motion.div 
+                                    initial={{opacity:0, x:100}} 
+                                    animate={{opacity:1, x:0}} 
+                                    exit={{opacity:0, x:100}} 
+                                    transition={{duration:0.2}}
+                                    key={'buttons'}  
+                                    className="bg-wrapperColor p-10 rounded shadow-md" 
+                                    onClick={(e)=>e.stopPropagation()}>
+
+                                    <p className="font-bold mb-6">Are you sure that you wanna to remove this post?</p>
+                                    <div className="flex justify-center space-x-10 font-bold"  >
+                                        <button className="shadow-md rounded bg-white px-5 py-2" onClick={()=>setDeletePostID('')}>BACK</button>
+                                        <button className="shadow-md rounded bg-delete-primary hover:bg-delete-hover text-white px-5 py-2" onClick={() => deletePost(deletePostID)}>DELETE</button>
+                                    </div>
+                                </motion.div>
+                        </motion.div> 
+                )}
+            </AnimatePresence>
         </div>
     )
 }

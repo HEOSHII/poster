@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --buttonColor-primary: 0deg 65% 60%;
-    --buttonColor-hover: 0deg 65% 55%;
+    --delete: 0deg 72% 49%;
+    --delete-hover: 0deg 72% 47%;
   }
 }
 
