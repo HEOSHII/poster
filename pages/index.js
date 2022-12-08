@@ -13,10 +13,10 @@ export default function Home() {
   const [allPosts, setAllPosts] = useState([]);
   const [user, loading] = useAuthState(auth);
   const route = useRouter();
-  const routedUserID = Object.keys(route.query)[0];
+  const { userID } = route.query;
 
   const checkUser = async () => {
-    if(!user) return await route.push('/auth/login');
+    if(!user) return route.push('/auth/login');
   }
 
   useEffect(()=>{
@@ -27,9 +27,9 @@ export default function Home() {
   const getPosts = async () => {
     const collectionRef = collection(db, 'posts');
     const q = 
-    !routedUserID
+    !userID
       ? query(collectionRef, orderBy('timestamp','desc')) 
-      : query(collectionRef, where('user','==',routedUserID), orderBy('timestamp','desc'));
+      : query(collectionRef, where('user','==', userID), orderBy('timestamp','desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setAllPosts(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })));
     });

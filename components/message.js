@@ -10,9 +10,9 @@ export default function Message({children, avatar, title, description, userName,
                 </div>
                 <div className="flex items-center justify-between h-6 transition-all opacity-50 group-hover:opacity-100">
                     <div className="flex h-full items-center">
-                        {/* <Link href={{ pathname:'/', query: user}}> */}
-                            <button className="italic text-sm hover:underline">{userName}</button>
-                        {/* </Link> */}
+                        <Link href={{ pathname:'/', query: {userID: user}}}>
+                            <p className="italic text-sm hover:underline">{userName}</p>
+                        </Link>
                         <img className="ml-3 h-full rounded-full" src={avatar} alt="avatar" />
                     </div>
                     {children}

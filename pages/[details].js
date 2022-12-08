@@ -5,7 +5,6 @@ import { auth, db } from "../utils/firebase"
 import { toast } from "react-toastify"
 import { toastOptions } from "../utils/variables"
 import { arrayUnion, doc, onSnapshot, Timestamp, updateDoc } from "firebase/firestore"
-
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link"
 import { useAuthState } from "react-firebase-hooks/auth"
@@ -13,20 +12,11 @@ import { useAuthState } from "react-firebase-hooks/auth"
 export default function Details() {
     const route = useRouter();
     const routePost = route.query;
-
-
-    useEffect(()=>{
-        if(!routePost.hasOwnProperty('id')) return route.push('/notFound');
-    },[]);
-
     const [user,loading] = useAuthState(auth);
     const [comment, setComment] = useState('');
     const [allComments, setAllComments] = useState([]);
 
-
-
     const checkUser = async () => {
-        if(loading) return;
         if(!user) return route.push('/auth/login');
       }
 
@@ -34,15 +24,12 @@ export default function Details() {
         checkUser();
     },[user, loading]);
 
-    
-
-
     //Submit comment
     const submitComment = async () => {
         if(!auth.currentUser) return route.push('/auth/loggin');
-        if(!comment) return toast.error('You need to type something!🤬',toastOptions);
-
+        if(!comment) return toast.error('You need to type something!🤬', toastOptions);
         if(!routePost.id) return await route.push('/');
+
         const docRef = doc(db, 'posts', routePost.id);
         await updateDoc(docRef, {
             ...routePost, 
@@ -57,10 +44,10 @@ export default function Details() {
         });
         setComment('');
     }
-    
+
     //Get Comments
     const getComments = async () => {
-        const docRef = doc(db,'posts',routePost.id);
+        const docRef = doc(db,'posts',routePost.id || '');
         const unsubscribe = onSnapshot(docRef, (snapshot)=>{
             snapshot.data() && setAllComments(snapshot.data().comments);
         });
@@ -68,24 +55,19 @@ export default function Details() {
     }
 
     useEffect(()=>{
+        if(!routePost.hasOwnProperty('id')) return;
         if(!route.isReady) return;
-        
         getComments();
     },[route.query]);
 
-    
-
-    const resizeTextarea = e => {
+    const setTextareaHeight = e => {
         e.target.style.height = "1rem";
         e.target.style.height = (e.target.scrollHeight)+"px"
     }
 
-
     return(
         <motion.ul initial={{ y: 10, opacity: 0 }} animate={{ y:0, opacity: 1 }}>
-            <Link href={'/'}>
-                <Message {...routePost} ></Message>
-            </Link>
+            <Message {...routePost} ></Message>
             <motion.div initial={{ y: 10, opacity: 0 }} animate={{ y:0, opacity: 1 }} transition={{ delay: 0.1 }} className="w-full mt-2 shadow-sm">
                 <div>
                     {allComments?.length 
@@ -97,7 +79,7 @@ export default function Details() {
                             <li className="flex p-3 bg-wrapperColor border-b border-backgroundColor first:rounded-t" key={comment.time}> 
                                 <img className="rounded-full h-10" src={comment.avatar} alt="avatar" />
                                 <div className="flex flex-col max-w-full break-words items-left opacity-70 ml-2">
-                                    <Link href={{ pathname: "/", query: comment.user }}>
+                                    <Link href={{ pathname: "/", query: {userID: comment.user} }}>
                                         <p className="italic text-[14px] hover:underline">{comment.userName}:</p>
                                     </Link>
                                     <p className="text-md font-comment">– {comment.comment} </p>
@@ -119,9 +101,9 @@ export default function Details() {
                             rows="1" 
                             maxLength={255}
                             value={comment}
-                            onInput={(e)=>resizeTextarea(e)}
+                            onInput={(e) => setTextareaHeight(e)}
                             onChange={(e) => setComment(e.target.value)}
-                            placeholder={'Have something to say?🤔'}
+                            placeholder={'Do you have something to say?🤔'}
                             className="block mx-4 p-2.5 w-full text-sm text-textColor bg-slate-50 rounded border-none shadow-sm resize-none placeholder:opacity-30" 
                         />
                         <button onClick={submitComment} className="flex h-max justify-center text-buttonColor-main rounded-full cursor-pointer hover:text-headerColor hover:bg-white">

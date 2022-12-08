@@ -35,19 +35,19 @@ export default function Dashboard({isOpened}) {
                         animate={{ height: 'auto' }}
                         exit={{ height: 0, y: -5 }}
                         className="bg-white absolute overflow-hidden left-[-0.5rem] top-[calc(100%-1px)] w-full shadow-md rounded-b">
-                        <Link href={{pathname: '/profile', query: user.uid }}>
-                            <p className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">
-                                {TEXTS.DASHBOARD.PROFILE}
-                            </p>
-                        </Link>
                         <Link href="/post">
                             <button className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">
                                 {TEXTS.DASHBOARD.NEW_POST}
                             </button>
                         </Link>
-                        <Link href={{pathname: '/', query: user.uid }}>
+                        <Link href={{pathname: '/', query: {userID: user.uid} }}>
                             <p className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">
                                 {TEXTS.DASHBOARD.USER_POSTS}
+                            </p>
+                        </Link>
+                        <Link href={{pathname: '/profile' }}>
+                            <p className="w-full hover:bg-wrapperColor py-3 px-3 text-right text-lg">
+                                {TEXTS.DASHBOARD.PROFILE}
                             </p>
                         </Link>
                         <button className="w-full border-t hover:bg-wrapperColor py-3 px-3 text-right text-lg rounded-b " onClick={signOut}>
