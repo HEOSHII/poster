@@ -47,7 +47,7 @@ export default function login() {
     }
 
     return (
-        <div className="relative w-3/4 mx-auto text-center shadow-lg rounded mt-10">
+        <div className="relative z-20 w-3/4 mx-auto text-center shadow-lg rounded mt-10">
             <ThemeChanger />
                 <div className={`flex w-full relative top-[3px] ${tabsStyles.containerBefore}`}>
                 <button 
@@ -97,7 +97,7 @@ export default function login() {
             
                 </form>
                 <h3 className="font-bold mb-2">Sign in with:</h3>
-                <div className="flex flex-col justify-center bg-white dark:bg-background-dark rounded">
+                <div className="relative z-50 flex flex-col justify-center bg-white dark:bg-background-dark rounded">
                     <button onClick={GoogleLogin} className="w-full flex justify-center items-center shadow-md py-3 rounded text-xl transition-all hover:shadow-lg hover:scale-[1.01] active:scale-[0.99]">
                         <FcGoogle size={30}/>oogle
                     </button>

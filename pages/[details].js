@@ -37,9 +37,9 @@ export default function Details() {
             <Message {...routePost} ></Message>
             <motion.div initial={{ y: 10, opacity: 0 }} animate={{ y:0, opacity: 1 }} transition={{ delay: 0.2 }} className="w-full mt-2 shadow-sm">
                 {!allComments.length  
-                    ? <p className="font-bold text-center text-white">No comments, yet! Leave first one!</p> 
+                    ? <p className="font-bold text-center text-textColor-light dark:text-textColor-dark">No comments, yet! Leave first one!</p> 
                     :   <>
-                            <h3 className="font-bold text-xl text-center text-white">Comments</h3> 
+                            <h3 className="font-bold text-xl text-center text-textColor-light dark:text-textColor-dark">Comments</h3> 
                             <CommentsList comments={allComments}/>
                         </>
                 }

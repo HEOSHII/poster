@@ -1,11 +1,10 @@
 
 import { useState } from "react";
 import Dashboard from "./dashboard";
-import { motion, AnimatePresence } from "framer-motion";
 
 export default function User({ user }) {
     const [dashboardOpened, setDashboardOpened] = useState(false);
-    const userName = user.displayName.split(' ')[0];
+    const userName = user.displayName.split(' ')[0].toUpperCase();
 
     return (
         <div>
@@ -22,9 +21,7 @@ export default function User({ user }) {
                         onClick={() => setDashboardOpened(false)}>
                     </div>
                 )
-            }
-
-            
+            }            
         </div>
     )  
 }

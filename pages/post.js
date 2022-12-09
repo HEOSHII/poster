@@ -9,6 +9,7 @@ import { toastOptions } from "../utils/variables"
 import { changePageName } from "../redux/actions"
 import { useDispatch } from "react-redux"
 import Loading from "../components/spinner"
+import TextEditor from "../components/textEditor"
 
 
 export default function Post() {
@@ -80,7 +81,7 @@ export default function Post() {
             <motion.form initial={{ y:30, opacity: 0 }} animate={{ y:0, opacity: 1 }} className="shadow-md p-5 bg-container-light dark:bg-container-dark rounded" onSubmit={submitForm}>
                 <div className="flex flex-col">
                     <input 
-                        className={`bg-slate-100 text-textColor-light text-lg shadow-md rounded mb-2 p-2 placeholder:opacity-20 border-1 border-transparent focus:ring-0 focus:border-button-light dark:border-button-dark ${submittedOnce && !post.title && 'border-delete focus:!border-delete'}`} 
+                        className={`dark:bg-background-dark dark:text-textColor-dark text-lg shadow-md rounded mb-2 p-2 placeholder:opacity-20 border-1 border-transparent dark:border-transparent focus:ring-0 focus:border-button-light dark:border-button-dark dark:focus:border-button-dark ${submittedOnce && !post.title && '!border-delete focus:!border-delete'}`} 
                         type="text" 
                         maxLength={80}
                         placeholder="Title"
@@ -89,11 +90,12 @@ export default function Post() {
                         >
                     </input>
                     <textarea 
-                        className={`bg-slate-100 text-textColor-light text-lg shadow-md rounded mb-2 p-2 placeholder:opacity-20 border-1 border-transparent focus:ring-0 focus:border-button-light dark:border-button-dark resize-none ${submittedOnce && (!post.description || post.description.length > 300) && 'border-delete focus:!border-delete'}`}
+                        className={`dark:bg-background-dark dark:text-textColor-dark text-textColor-light text-lg shadow-md rounded mb-2 p-2 placeholder:opacity-20 border-1 border-transparent dark:border-transparent focus:ring-0 focus:border-button-light dark:focus:border-button-dark dark:border-button-dark resize-none ${submittedOnce && (!post.description || post.description.length > 300) && '!border-delete focus:!border-delete'}`}
                         placeholder="Description"
                         value={post.description}
                         rows='9'
                         onChange={event => setPost({...post, description: event.target.value})}>
+                        <TextEditor />
                     </textarea>
                     <div className="mb-2 h-3 text-wrapperColor">
                         { post.description.length ? (<p className={`text-[10px] ${ post.description.length > 300 ? 'text-red-600' : '' }`}> {post.description.length}/300</p>) : '' }
@@ -103,7 +105,7 @@ export default function Post() {
                         type="submit" 
                         disabled={submittedOnce && (!post.title || !post.description || post.description.length > 300)}>
                             <div className="relative mx-auto overflow-hidden">
-                                <h1 className="flex justify-center items-center">
+                                <h1 className="flex justify-center items-center text-textColor-dark dark:text-textColor-light">
                                     {disabledButton
                                         ? (<Loading />) 
                                         : (post.hasOwnProperty('id') ? "Update" : "Post it")

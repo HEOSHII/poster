@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import Message from "../components/message";
+import { useEffect, useState } from "react"
+import Message from "../components/message"
 import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore"
 import { db, auth } from '../utils/firebase'
 import { useRouter } from "next/router";
@@ -9,7 +9,7 @@ import Controlls from "../components/controlls"
 import CommentsInfo from "../components/commentsInfo"
 import Loading from "../components/spinner"
 import { useDispatch } from "react-redux"
-import { changePageName } from "../redux/actions";
+import { changePageName } from "../redux/actions"
 
 export default function Home() {
   const dispatch = useDispatch();

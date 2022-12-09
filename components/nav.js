@@ -13,7 +13,7 @@ export default function Nav() {
                 <AnimatePresence>
                     <motion.nav initial={{y:-100}} animate={{y:0}} transition={{delay:0.5, duration:0.5}} className={`flex justify-between items-center container`}>
                         <Link href="/">
-                            <button className={`bg-button-light px-5 rounded shadow-md text-xl font-bold h-button transition-all text-white hover:brightness-105 dark:bg-button-dark`}>
+                            <button className={`bg-button-light px-5 rounded shadow-md text-xl font-bold h-button transition-all text-textColor-dark dark:text-textColor-light hover:brightness-105 dark:bg-button-dark`}>
                                 POSTS
                             </button>
                         </Link>
