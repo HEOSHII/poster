@@ -95,7 +95,6 @@ export default function Post() {
                         value={post.description}
                         rows='9'
                         onChange={event => setPost({...post, description: event.target.value})}>
-                        <TextEditor />
                     </textarea>
                     <div className="mb-2 h-3 text-wrapperColor">
                         { post.description.length ? (<p className={`text-[10px] ${ post.description.length > 300 ? 'text-red-600' : '' }`}> {post.description.length}/300</p>) : '' }
