@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     "./pages/**/*.js",
     "./components/**/*.js",
@@ -28,19 +29,34 @@ module.exports = {
         padding: '1rem',
       },
       colors: {
-        backgroundColor: '#B9B7BD',
-        textColor: '#868B8E',
-        headerColor: '#868B8E',
-        wrapperColor: '#EEEDE7',
-        buttonColor: {
-          main: '#7cc2af',
-          hover: '#6fbca7',
+        background: {
+          light: '#F7ECDE',
+          dark: '#222831',
         },
-        backgropColor: 'rgba(0,0,0,0.3)',
-        delete: {
-          primary: 'hsl(var(--delete) / <alpha-value>)',
-          hover: 'hsl(var(--delete-hover) / <alpha-value>)',
-        }
+
+        textColor: {
+          light: '#393939',
+          dark: '#EEEEEE',
+        },
+
+        header: {
+          light: "#E9DAC1",
+          dark: '#393E46',
+        },
+
+        container: {
+          light: '#FBF8F1',
+          dark: '#393E46'
+        },
+
+        button: {
+          light: '#54BAB9',
+          dark: '#FFD369'
+        },
+
+        backdrop: 'rgba(0,0,0,0.3)',
+
+        delete: 'hsl(var(--delete) / <alpha-value>)',        
       },
     },
   },

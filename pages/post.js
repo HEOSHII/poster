@@ -6,12 +6,17 @@ import { useRouter } from "next/router"
 import { toast } from "react-toastify"
 import { motion, AnimatePresence } from "framer-motion";
 import { toastOptions } from "../utils/variables"
+import { changePageName } from "../redux/actions"
+import { useDispatch } from "react-redux"
+import Loading from "../components/spinner"
 
 
 export default function Post() {
+    const dispatch = useDispatch();
     //Form state
     const emptyPost = {title:'', description: '', comments: []}
     const [post, setPost] = useState(emptyPost)
+    const [disabledButton, setdisabledButton] = useState(false)
     const [submittedOnce, setSubmittedOnce] = useState(false);
     //AUTH
     const [user, loading] = useAuthState(auth);
@@ -19,21 +24,23 @@ export default function Post() {
     const route = useRouter();
     const rotedPost = route.query;
     //Cheack user
-    const getData = async () => {
+    const getPost = async () => {
         if(loading) return;
         if(!user) route.push('/auth/login');
         if(rotedPost.id) {
+            dispatch(changePageName('UPADATING POST'));
             setPost({
                 title: rotedPost.title, 
                 description: rotedPost.description,
                 id: rotedPost.id
             });
         } else {
+            dispatch(changePageName('CREATING POST'));
             setPost(emptyPost);
         }
     }
     useEffect(() => {
-        getData();
+        getPost();
     }, [route.query]);
 
     //FORM SUBMIT
@@ -42,9 +49,10 @@ export default function Post() {
         setSubmittedOnce(true);
 
         //Validators
-        if(!post.title || !post.description) return toast.error('Some fields are empty!', toastOptions); 
-        if(post.description.length > 300) return toast.error('Description field is too long!', toastOptions)
-        
+        if(post.description.length > 300) return toast.warning('Description field is too long!', toastOptions);
+        if(!post.title || !post.description) return toast.warning('Some fields are empty!', toastOptions); 
+        setdisabledButton(true);
+
         //Upadate post
         if(post?.hasOwnProperty('id')) {
             const docRef = doc(db, 'posts', post.id);
@@ -69,25 +77,10 @@ export default function Post() {
     }    
 
     return(
-            <motion.form initial={{ y:30, opacity: 0 }} animate={{ y:0, opacity: 1 }} className="shadow-md p-5 bg-wrapperColor rounded" onSubmit={submitForm}>
-                <div className="relative mx-auto overflow-hidden mb-2">
-                    <p className="font-bold text-center text-xl uppercase opacity-0">{!post.hasOwnProperty('id') ? 'Create Post:' : 'Update Post'}</p>
-                    <AnimatePresence>
-                        {post.hasOwnProperty('id') 
-                        ?
-                            <motion.h1 key={'update'} initial={{ y: 50 }} animate={{ y: 0 }} exit={{ y: -50 }} className="absolute h-wull w-full left-0 top-0 text-center font-bold text-xl uppercase">
-                                Update Post:
-                            </motion.h1> 
-                            :
-                            <motion.h1 key={'create'} initial={{ y: 50 }} animate={{ y: 0 }} exit={{ y: -50 }} className="absolute h-wull w-full left-0 top-0 text-center font-bold text-xl uppercase">
-                                Create Post:
-                            </motion.h1> 
-                        }
-                    </AnimatePresence>
-                </div>
+            <motion.form initial={{ y:30, opacity: 0 }} animate={{ y:0, opacity: 1 }} className="shadow-md p-5 bg-container-light dark:bg-container-dark rounded" onSubmit={submitForm}>
                 <div className="flex flex-col">
                     <input 
-                        className={`bg-white shadow-md rounded mb-2 p-2 placeholder:opacity-20 outline-solid focus:outline-1 ${submittedOnce && !post.title ? 'border border-red-500 outline-red-500' : 'outline-headerColor'}`} 
+                        className={`bg-slate-100 text-textColor-light text-lg shadow-md rounded mb-2 p-2 placeholder:opacity-20 border-1 border-transparent focus:ring-0 focus:border-button-light dark:border-button-dark ${submittedOnce && !post.title && 'border-delete focus:!border-delete'}`} 
                         type="text" 
                         maxLength={80}
                         placeholder="Title"
@@ -96,34 +89,26 @@ export default function Post() {
                         >
                     </input>
                     <textarea 
-                        className={`bg-white shadow-md rounded mb-2 p-2 placeholder:opacity-20 outline-solid focus:outline-1 resize-none ${submittedOnce && !post.description || post.description.length > 300 ? 'border border-red-500 outline-red-500' : 'outline-headerColor'}`}
+                        className={`bg-slate-100 text-textColor-light text-lg shadow-md rounded mb-2 p-2 placeholder:opacity-20 border-1 border-transparent focus:ring-0 focus:border-button-light dark:border-button-dark resize-none ${submittedOnce && (!post.description || post.description.length > 300) && 'border-delete focus:!border-delete'}`}
                         placeholder="Description"
                         value={post.description}
-                        rows='10'
+                        rows='9'
                         onChange={event => setPost({...post, description: event.target.value})}>
                     </textarea>
                     <div className="mb-2 h-3 text-wrapperColor">
                         { post.description.length ? (<p className={`text-[10px] ${ post.description.length > 300 ? 'text-red-600' : '' }`}> {post.description.length}/300</p>) : '' }
                     </div>
                     <button 
-                        className="bg-buttonColor-main shadow-md hover:bg-buttonColor-hover text-white font-bold rounded mx-auto w-full h-button transition-all uppercase disabled:opacity-20 disabled:cursor-not-allowed" 
+                        className={`bg-button-light dark:bg-button-dark shadow-md hover:brightness-105 text-white font-bold rounded mx-auto w-full h-button transition-all uppercase disabled:opacity-20 disabled:cursor-not-allowed ${disabledButton && 'pointer-events-none'}`} 
                         type="submit" 
                         disabled={submittedOnce && (!post.title || !post.description || post.description.length > 300)}>
-
                             <div className="relative mx-auto overflow-hidden">
-                                <p className="font-bold text-center uppercase opacity-0">{!post.hasOwnProperty('id') ? 'Create Post:' : 'Update Post'}</p>
-                                <AnimatePresence>
-                                    {post.hasOwnProperty('id') 
-                                    ?
-                                        <motion.h1 key={'update'} initial={{ y: 50 }} animate={{ y: 0 }} exit={{ y: -50 }} className="absolute h-wull w-full left-0 top-0 text-center font-bold uppercase">
-                                            Update
-                                        </motion.h1> 
-                                        :
-                                        <motion.h1 key={'create'} initial={{ y: 50 }} animate={{ y: 0 }} exit={{ y: -50 }} className="absolute h-wull w-full left-0 top-0 text-center font-bold uppercase">
-                                            Post IT
-                                        </motion.h1> 
-                                    }
-                                </AnimatePresence>
+                                <h1 className="flex justify-center items-center">
+                                    {disabledButton
+                                        ? (<Loading />) 
+                                        : (post.hasOwnProperty('id') ? "Update" : "Post it")
+                                    } 
+                                </h1>
                             </div>
                     </button>
                 </div>

@@ -6,11 +6,14 @@ import { useState, useEffect } from "react"
 import { updateProfile } from "firebase/auth"
 import { collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore"
 import { toastOptions } from "../utils/variables"
-import { CgSpinnerTwoAlt } from 'react-icons/cg'
-
+import Loading from "../components/spinner"
 import { motion, AnimatePresence } from "framer-motion";
+import { useDispatch } from 'react-redux'
+import { changePageName } from "../redux/actions"
 
 export default function Profile() {
+    const dispatch = useDispatch();
+
     const [user, loading] = useAuthState(auth);
     const route = useRouter();
 
@@ -19,6 +22,7 @@ export default function Profile() {
     } 
 
     useEffect(() => {
+        dispatch(changePageName('PROFILE'))
         checkUser();
     },[user,loading]);
 
@@ -52,42 +56,40 @@ export default function Profile() {
       },[route.isReady]);
 
     const submitNewUserName = async () => {
+        if(!newUserName.length) return toast.warning("Name shouldn't be empty!",{...toastOptions, position: toast.POSITION.TOP_CENTER});
+        if(newUserName.length < 4) return toast.warning('Name should be longer that 4 symbols',{...toastOptions, position: toast.POSITION.TOP_CENTER});
         setSaving(true);
         await updateProfile(auth.currentUser, {displayName: newUserName});
         await updatePosts(usersPosts);
         route.push('/profile');
         toast.success('Profile updated!', toastOptions);
-        setTimeout(()=>{
-            setSaving(false);
-        },1000);
+        setSaving(false);
+    }
+
+    const variants = {
+        hidden: { y: 0, opacity: 1 },
+        showen: { y:20, opacity: 0 }
     }
     
     return(
         <AnimatePresence>
             <motion.div 
-                initial={{ y:10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                className="shadow-md bg-wrapperColor rounded p-5 flex flex-col items-center">
-                    <motion.h2 
-                    initial={{ y:20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    // transition={{ delay: 0.1 }}
-                    className="mb-5">Change your name:</motion.h2>
-                    <motion.input 
-                    initial={{ y:30, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.1 }}
-                    className=" shadow-md mb-4 rounded text-center " type="text" value={newUserName} onChange={(e) => setNewUserName(e.target.value)} />
-                    <motion.button 
-                    initial={{ y:40, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                    className="shadow-md bg-buttonColor-main h-button px-5 rounded text-white font-bold transition-colors hover:bg-buttonColor-hover disabled:opacity-50 disabled:cursor-not-allowed" 
-                    onClick={submitNewUserName}
-                    disabled={saving}>
-                        {saving ? <p className="flex items-center">Saving...<CgSpinnerTwoAlt className=" animate-spin" size={20} /></p> : 'Save'}
+                variants={variants}
+                initial='showen'
+                animate='hidden'
+                transition={{staggerChildren:0.1}}
+                className="shadow-md bg-container-light dark:bg-container-dark rounded p-5 flex flex-col items-center">
+                    <motion.h2 key={'key1'} variants={variants} className="mb-5">Change your name:</motion.h2>
+                    <motion.input key={'key12'} variants={variants} 
+                                    maxLength={20} className=" bg-slate-100 shadow-md text-textColor-light rounded mb-5 p-2 placeholder:opacity-20 border-1 border-transparent focus:ring-0 focus:border-header-light text-center" 
+                                    type="text" 
+                                    value={newUserName} onChange={(e) => setNewUserName(e.target.value)} />
+                    <motion.button key={'key13'} variants={variants} 
+                                    className="shadow-md bg-button-light h-button px-5 rounded text-textColot-light font-bold transition-colors hover:brightness-105 dark:bg-button-dark disabled:opacity-50 disabled:cursor-not-allowed" 
+                                    onClick={submitNewUserName}
+                                    disabled={saving}>
+                        {saving ? <p className="flex items-center">Saving...<Loading /></p> : 'Save'}
                     </motion.button>
-            
             </motion.div>
         </AnimatePresence>
     )

@@ -10,6 +10,15 @@ export const TEXTS = {
         PROFILE: 'Profile',
         NEW_POST: 'New Post',
         USER_POSTS: 'My Posts',
-        SIGN_OUT: 'Sign Out'
+        SIGN_OUT: 'Sign Out',
+        SETTINGS: "Settings",
+    },
+    PAGE_NAMES: {
+        ALL_POST: 'ALL POSTS',
+        UPDATE_POST: 'UPDATING POST',
+        CREATE_POST: 'CREATING POST',
+        PROFILE: 'PROFILE',
+        SETTINGS: "SETTINGS",
     }
 }
+
