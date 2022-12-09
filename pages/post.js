@@ -9,7 +9,6 @@ import { toastOptions } from "../utils/variables"
 import { changePageName } from "../redux/actions"
 import { useDispatch } from "react-redux"
 import Loading from "../components/spinner"
-import TextEditor from "../components/textEditor"
 
 
 export default function Post() {
