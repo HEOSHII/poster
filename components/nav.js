@@ -11,7 +11,7 @@ export default function Nav() {
     return ( 
             <div className={`w-screen bg-header-light py-3 shadow-md transition-all fixed z-50 hover:opacity-100 dark:bg-header-dark`}>
                 <AnimatePresence>
-                    <motion.nav initial={{y:-100}} animate={{y:0}} transition={{delay:0.5, duration:0.5}} className={`flex justify-between items-center container`}>
+                    <motion.nav initial={{y:-100}} animate={{y:0}} className={`flex justify-between items-center container`}>
                         <Link href="/">
                             <button className={`bg-button-light px-5 rounded shadow-md text-xl font-bold h-button transition-all text-textColor-dark dark:text-textColor-light hover:brightness-105 dark:bg-button-dark`}>
                                 POSTS

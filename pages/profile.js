@@ -34,11 +34,7 @@ export default function Profile() {
         const collectionRef = collection(db, "posts");
         const q = query(collectionRef, where("user", "==", user?.uid || ''));
         const querySnapshot = await getDocs(q);
-        const posts = []
-        querySnapshot.forEach((doc) => {
-            posts.push(doc.id)
-        });
-        setUsersPosts(posts);
+        setUsersPosts(querySnapshot.docs.map((doc) => doc.id));
     }
 
     const updatePosts = async (IDs) => {

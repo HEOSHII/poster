@@ -33,7 +33,7 @@ export default function Dashboard({ isOpened }) {
                         initial={{ height: 0 }}
                         animate={{ height: 'auto' }}
                         exit={{ height: 0, y: -5 }}
-                        className="bg-slate-100 absolute overflow-hidden left-[-0.5rem] top-[calc(100%-1px)] w-full shadow-md rounded-b">
+                        className="bg-slate-100 fixed top-0 right-0 overflow-hidden  w-full shadow-md rounded-b min-w-[100px] sm:absolute sm:left-0 sm:top-[calc(100%-1px)]">
                         <Link href="/post">
                             <button className="w-full hover:bg-slate-200 py-3 px-3 text-right text-lg text-gray-700">
                                 {TEXTS.DASHBOARD.NEW_POST}

@@ -20,7 +20,7 @@ export default function Controlls({...post}) {
     }
 
     return (
-        <div className="flex justify-center items-center space-x-1 z-20">
+        <div className="absolute top-2 right-2 flex justify-center items-center space-x-1 z-20">
             <Link href={{ pathname:'/post', query: post }} >
                 <button 
                     title="Edit" 
