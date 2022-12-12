@@ -29,7 +29,7 @@ export default function User({ user }) {
             </div>
             {dashboardOpened && (
                     <div 
-                        className="backdrop-blur-sm absolute top-0 left-0 bg-backdrop transition-all w-screen h-screen z-20" 
+                        className="backdrop-blur-sm absolute top-0 left-0 bg-black bg-opacity-30 transition-all w-screen h-screen z-20" 
                         onClick={() => setDashboardOpened(false)}>
                     </div>
                 )

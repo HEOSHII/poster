@@ -53,9 +53,6 @@ module.exports = {
           light: '#54BAB9',
           dark: '#FFD369'
         },
-
-        backdrop: 'rgba(0,0,0,0.3)',
-
         delete: 'hsl(var(--delete) / <alpha-value>)',        
       },
     },
