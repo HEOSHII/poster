@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }) {
       <Provider store={store}>
         <ThemeProvider attribute="class">
           <Layout Layout>
-            <ToastContainer limit={1} />
+            <ToastContainer />
               <Component {...pageProps} />
             </Layout>
         </ThemeProvider>

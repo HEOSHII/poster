@@ -81,7 +81,7 @@ export default function Profile() {
                                     type="text" 
                                     value={newUserName} onChange={(e) => setNewUserName(e.target.value)} />
                     <motion.button key={'key13'} variants={variants} 
-                                    className="shadow-md bg-button-light h-button px-5 rounded text-textColot-light font-bold transition-colors hover:brightness-105 dark:bg-button-dark disabled:opacity-50 disabled:cursor-not-allowed" 
+                                    className="shadow-md uppercase bg-button-light text-textColor-dark dark:text-textColor-light h-button px-5 rounded text-textColot-light font-bold transition-colors hover:brightness-105 dark:bg-button-dark disabled:opacity-50 disabled:cursor-not-allowed" 
                                     onClick={submitNewUserName}
                                     disabled={saving}>
                         {saving ? <p className="flex items-center">Saving...<Loading /></p> : 'Save'}

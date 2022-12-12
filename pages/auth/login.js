@@ -10,35 +10,36 @@ import { changePageName } from "../../redux/actions";
 import ThemeChanger from "../../components/themeChanger";
 
 export default function login() {
+    const dispatch = useDispatch();
+
     const route = useRouter();
     const emptyForm = {name:'',email:'',password:''};
     const [form, setForm] = useState(emptyForm);
     const [isRegistration, setRegistration] = useState(false);
     const [user, loading] = useAuthState(auth);
-    const dispatch = useDispatch();
-
-    useEffect(()=>{
-        dispatch(changePageName(''));
-        if(loading) return;
-        if(user){
-            route.push('/');
-        } else {
-            console.log('login')
-        }
-    },[user]);
         
     //SIGN IN WITH GOOGLE 
     const googleProvider = new GoogleAuthProvider();
+
     const GoogleLogin = async () => {
         try {
-            await signInWithPopup(auth, googleProvider);
+            const result = await signInWithPopup(auth, googleProvider);
             route.push("/");
         } catch (error) {
             console.error(error)
         }
     }
 
-    // STYLES
+    useEffect(() => {
+        if(user) {
+            route.push('/')
+        } else {
+            dispatch(changePageName('login'))
+        }
+           
+    }, [user]);
+
+    // ADDITIONAL STYLES
     const tabsStyles = {
         main: 'rounded-t font-bold border-2 border-t-2 border-textColor-light flex-1 p-2 hover:opacity-100 dark:border-textColor-dark',
         active: 'bg-container-light border-b-0 z-10 rounded-t dark:bg-container-dark',
@@ -48,7 +49,7 @@ export default function login() {
 
     return (
         <div className="relative z-20 w-3/4 mx-auto text-center shadow-lg rounded mt-10">
-            <ThemeChanger />
+                <ThemeChanger />
                 <div className={`flex w-full relative top-[3px] ${tabsStyles.containerBefore}`}>
                 <button 
                     className={` ${tabsStyles.main} border-r-2 ${!isRegistration ? tabsStyles.active : `${tabsStyles.deactive} translate-x-[3px]`}`} 

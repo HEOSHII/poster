@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useAuthState } from "react-firebase-hooks/auth"
-import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore"
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore"
 import { auth, db } from "../utils/firebase"
 import { useRouter } from "next/router"
 import { toast } from "react-toastify"
@@ -23,7 +23,7 @@ export default function Post() {
     //ROUTER
     const route = useRouter();
     const rotedPost = route.query;
-    //Cheack user
+    //Check user
     const getPost = async () => {
         if(loading) return;
         if(!user) route.push('/auth/login');
@@ -59,7 +59,7 @@ export default function Post() {
             const updatedPost = { ...post, timestamp: Date.now()};
             await updateDoc(docRef, updatedPost);
             toast.success('Post has been updated! Cool! 🤌🏻', toastOptions);
-            return route.push({pathname: '/', query: auth.currentUser.uid});
+            return route.push({ pathname: '/', query: { userID: auth.currentUser.uid, userName: auth.currentUser.displayName } });
         }
 
         // Make a new post
@@ -71,6 +71,15 @@ export default function Post() {
             userName: user.displayName,
             timestamp: Date.now()
         });
+
+        // Change number of all posts
+        const countsRef = doc(db, 'counts', 'posts');
+        const countsSnap = await getDoc(countsRef);
+        const count = countsSnap.data();
+        const updatedCount = {count: count.count + 1 };
+        await updateDoc(countsRef, updatedCount);
+
+        //Succes notification
         toast.success('Post created succesfuly!', toastOptions);
         setPost(emptyPost);
         return route.push('/');

@@ -15,9 +15,11 @@ export default function Details() {
     const route = useRouter();
     const routePost = route.query;
     const [allComments, setAllComments] = useState([]);
+    const [user,loading] = useAuthState(auth);
 
     //Get Comments
     const getComments = async () => {
+        if(!user) return route.push('/auth/login');
         const docRef = doc(db,'posts',routePost.id || '');
         const unsubscribe = onSnapshot(docRef, (snapshot)=>{
             snapshot.data() && setAllComments(snapshot.data().comments);
@@ -26,11 +28,14 @@ export default function Details() {
     }
 
     useEffect(()=>{
-        if(!routePost.hasOwnProperty('id')) return;
-        if(!route.isReady) return;
-        dispatch(changePageName('COMMENTS'));
-        getComments();
-    },[route.query]);
+        if(!routePost.hasOwnProperty('id')) route.push('/');
+        if(route.isReady) {
+            dispatch(changePageName('Comments'))
+            getComments();
+        }
+    },[route.isReady]);
+
+    
 
     return(
         <motion.ul initial={{ y: 10, opacity: 0 }} animate={{ y:0, opacity: 1 }}>

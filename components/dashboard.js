@@ -1,29 +1,18 @@
 import { auth } from "../utils/firebase"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { useRouter } from "next/router"
-import { useEffect } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { TEXTS } from "../utils/variables"
 
 export default function Dashboard({ isOpened }) {
     const route = useRouter();
-    const [user,loading] = useAuthState(auth);
-
-    //Are user logged
-    const checkUser = async () => {
-        if(loading) return;
-        if(!user) return route.push('/auth/login');
-    }
-    //Get users data
-    useEffect(() => {
-        checkUser();
-        },[user,loading]
-    );
+    const [user, loading] = useAuthState(auth);
     
-    const signOut = () => {
-        auth.signOut();
+    const signOut = async () => {
+        await auth.signOut();
         route.push('/auth/login');
+        return;
     }
 
     return(
@@ -39,7 +28,7 @@ export default function Dashboard({ isOpened }) {
                                 {TEXTS.DASHBOARD.NEW_POST}
                             </button>
                         </Link>
-                        <Link href={{pathname: '/', query: {userID: user.uid} }}>
+                        <Link href={{pathname: '/', query: {userID: user.uid, userName: user.displayName } }}>
                             <p className="w-full hover:bg-slate-200 py-3 px-3 text-right text-lg text-gray-700">
                                 {TEXTS.DASHBOARD.USER_POSTS}
                             </p>

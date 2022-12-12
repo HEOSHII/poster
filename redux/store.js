@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import { CHANGE_PAGE_NAME } from './types';
 
 const initialState = {
-    name: '',
+    name: 'ALL POSTS',
 }
 
 const pageNameReducer = (state = initialState, {type, payload}) => {

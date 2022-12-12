@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import Message from "../components/message"
-import { collection, limit, onSnapshot, orderBy, query, startAt, where } from "firebase/firestore"
+import { collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, startAfter, where } from "firebase/firestore"
 import { db, auth } from '../utils/firebase'
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth"
@@ -11,84 +11,123 @@ import Spinner from "../components/spinner"
 import { useDispatch } from "react-redux"
 import { changePageName } from "../redux/actions"
 
+
 export default function Home() {
   const dispatch = useDispatch();
 
   //State with all posts
   const [allPosts, setAllPosts] = useState([]);
   const [user, loading] = useAuthState(auth);
-  const [postsLoading, setPostsLoading] = useState(false);
-  const [postsLimit, setLimit] = useState(4);
+  const [postsLoading,  setPostsLoading] = useState(true);
   const route = useRouter();
   const { userID, userName } = route.query;
+  const [lastDoc, setLastDoc] = useState(0);
+  const [docsCount, setDocsCount] = useState(0);
+  const postsViewLimit = 4;
 
-  const getPosts = async () => {
-    // CHECK USER
-    if(!user) return route.push('/auth/login');
 
-    // SET PAGE NAME
-    if(!userID) {
-      dispatch(changePageName('ALL POSTS'));
-    } else {
-      dispatch(changePageName(userID === auth.currentUser.uid ? auth.currentUser.displayName : userName));
+  const getPosts = async (last) => {
+    if(loading) return;
+    if(!user) {
+      route.push('/auth/login');
+      return;
+    }
+    setPostsLoading(true);
+
+    //Coolection of posts
+    const postsCollection = collection(db, 'posts');
+
+    //Selected user posts
+      if(userID) {
+        dispatch(changePageName(userName));
+        const q = query(postsCollection, where('user','==', userID), orderBy('timestamp','desc'));
+        const snaps = await getDocs(q);
+        const docsToRender = snaps.docs.map( doc => ({ ...doc.data(), id: doc.id }) );
+        setAllPosts(docsToRender);
+        setPostsLoading(false)
+        return;
+      }
+
+    //All users posts
+    dispatch(changePageName("All posts"));
+
+    //Get count of all posts
+    const docsCountRef = doc(db, 'counts', 'posts'); 
+    const docsCount = await getDoc(docsCountRef);
+    setDocsCount(docsCount.data().count);
+
+    const q = query(postsCollection, orderBy('timestamp','desc'), startAfter(last || '') , limit(postsViewLimit));
+    const snaps = await getDocs(q);
+    const docsToRender = snaps.docs.map( doc => ({ ...doc.data(), id: doc.id }) );
+
+    setLastDoc(snaps.docs[snaps.docs.length - 1]); // Marker where the next render starts
+
+    if(!last) {
+      setAllPosts(docsToRender);
+      setPostsLoading(false);
+      return;
     }
 
-    //RENDER AND SUBSCRIBE TO POSTS
-    const collectionRef = collection(db, 'posts');
-    const q = 
-    !userID
-      ? query(collectionRef, orderBy('timestamp','desc'), limit(postsLimit)) 
-      : query(collectionRef, where('user','==', userID), orderBy('timestamp','desc'), limit(postsLimit));
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-      setAllPosts(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })));
-    });
+    setAllPosts(() => 
+       [ 
+        ...allPosts, 
+        ...docsToRender
+    ]);
     setPostsLoading(false);
-    return unsubscribe;
   }
 
   useEffect(()=>{
-    if(!route.isReady) return;
-    getPosts();
-  },[route.query, postsLimit]);
+    if(route.isReady && !loading) {
+      getPosts();
+    } 
+  }, [route.query, user, loading]);
 
-  useEffect(()=>{
-    window.addEventListener('scroll', () => {
-      if (window.pageYOffset + window.innerHeight === document.body.clientHeight && !postsLoading) {
-        setPostsLoading(true);
-        setLimit(prev => prev + 1);
+  useEffect(() => {
+    window.addEventListener('scroll', function scrollingListener() {
+      if(userID) {
+        this.removeEventListener('scroll', scrollingListener);
+        return;
+      }
+      if(allPosts.length === docsCount) {
+        this.removeEventListener('scroll', scrollingListener);
+        return;
+      }
+      if (window.innerHeight + window.scrollY === document.body.clientHeight) {
+        getPosts(lastDoc);    
+        this.removeEventListener('scroll', scrollingListener);
       }
     });
-  },[]);
+  },[lastDoc]);
+
+
+  if(loading || postsLoading && !lastDoc) return <Spinner />
+
+  if(!allPosts.length) return (
+      <p className="flex justify-center bg-container-light dark:bg-container-dark text-textColor-light rounded p-3 shadow-sm text-center dark:text-textColor-dark">
+        Sorry, but there are no posts, yet!
+      </p>
+  )
 
   return (
-        <>
-          <ul className="flex flex-col space-y-3">
-            <AnimatePresence>
-              {allPosts.length ? (
-                allPosts.map((post, index) => (
-                  <motion.li  
-                    initial={ {y: 10, opacity: 0} }
-                    animate={ {y: 0, opacity: 1} }
-                    transition={{ 
-                      delay: index * 0.1 
-                    }} 
-                    key={post.id}
-                    className="relative rounded border border-opacity-20 dark:border-opacity-20 border-textColor-light dark:border-textColor-dark">
-                      <Message {...post}  >
-                          <CommentsInfo {...post} />
-                          {post?.user === auth.currentUser.uid && <Controlls {...post} />}
-                      </Message>
-                  </motion.li>
-                )) 
-              ) : (
-                <p className="flex justify-center bg-container-light dark:bg-container-dark rounded p-3 shadow-sm text-center text-textColor-light">
-                  { loading ? <Spinner /> : 'There are no posts yet, sorry 😭'}
-                </p>
-              )
+      <div>
+        <ul className="flex flex-col space-y-3 relative z-0 mb-4">
+          <AnimatePresence>
+            { allPosts.map((post) => (
+              <li key={post.id}>
+                <Message {...post}>
+                    <CommentsInfo {...post}  />
+                    { 
+                      post.user === auth.currentUser?.uid && 
+                      <Controlls {...post} />
+                    }
+                </Message>
+              </li>
+            )) 
             }
-            </AnimatePresence>
-          </ul>
-           {postsLoading &&  <Spinner size={40}/> }
-        </>
+          </AnimatePresence>
+        </ul>
+        {!userID && postsLoading && <Spinner />}
+        {!userID && allPosts.length === docsCount && <p className="mt-5 font-bold text-center text-lg">That's all, folks!</p>}
+      </div>
   )
 }
