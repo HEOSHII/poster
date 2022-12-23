@@ -21,6 +21,8 @@
     "react-redux": "^8.0.5",
     "react-toastify": "^9.1.1",
     "redux": "^4.2.0",
+    "slate": "^0.87.0",
+    "slate-react": "^0.87.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

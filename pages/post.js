@@ -11,6 +11,8 @@ import { useDispatch } from "react-redux"
 import { storage } from "../utils/firebase"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import Loading from "../components/spinner"
+import { createEditor } from 'slate'
+import { Slate, Editable, withReact } from 'slate-react'
 
 
 export default function Post() {
@@ -22,10 +24,19 @@ export default function Post() {
         comments: []
     }
 
+    const [editor] = useState(() => withReact(createEditor()));
+    const initialValue = [
+        {
+          type: 'paragraph',
+          children: [{ text: '' }],
+        },
+      ]
+
     const [post, setPost] = useState(initialPost);
     const [uploadedImage, setUploadedImage] = useState(null);
     const [disabledButton, setdisabledButton] = useState(false)
     const [submittedOnce, setSubmittedOnce] = useState(false);
+       
 
     //AUTH
     const [user, loading] = useAuthState(auth);
@@ -109,52 +120,55 @@ export default function Post() {
     }    
 
     return(
-            <motion.form initial={{ y:30, opacity: 0 }} animate={{ y:0, opacity: 1 }} className="shadow-md p-5 bg-container-light dark:bg-container-dark rounded" onSubmit={submitForm}>
-                <div className="flex flex-col">
-                    <input 
-                        className={`dark:bg-background-dark dark:text-textColor-dark text-lg shadow-md rounded mb-2 p-2 placeholder:opacity-20 border-1 border-transparent dark:border-transparent focus:ring-0 focus:border-button-light dark:border-button-dark dark:focus:border-button-dark ${submittedOnce && !post.title && '!border-delete focus:!border-delete'}`} 
-                        type="text" 
-                        maxLength={80}
-                        placeholder="Title"
-                        value={post.title}
-                        onChange={e => setPost({...post, title: e.target.value})}
-                        >
-                    </input>
-                    <textarea 
-                        className={`dark:bg-background-dark dark:text-textColor-dark text-textColor-light text-lg shadow-md rounded p-2 placeholder:opacity-20 border-1 border-transparent dark:border-transparent focus:ring-0 focus:border-button-light dark:focus:border-button-dark dark:border-button-dark resize-none ${submittedOnce && (!post.description || post.description.length > 300) && '!border-delete focus:!border-delete'}`}
-                        placeholder="Description"
-                        value={post.description}
-                        rows='9'
-                        onChange={event => setPost({...post, description: event.target.value})}>
-                    </textarea>
-                    <div className="h-2 text-wrapperColor">
-                        { post.description.length ? (<p className={`text-[8px] ${ post.description.length > 300 ? 'text-red-600' : '' }`}> {post.description.length}/300</p>) : '' }
-                    </div>
-                    <label className={`mt-3 mb-5 cursor-pointer bg-background-light dark:bg-background-dark text-textColor-light dark:text-textColor-dark rounded border  ${uploadedImage || post.imageName  ? 'border-green-500 border-double' : 'border-button-light dark:border-button-dark border-dashed'} py-5 px-2`} htmlFor="image">
-                        <input 
-                            type="file" 
-                            id='image' 
-                            className="hidden" 
-                            accept={"image/png,.jpeg,.jpg,.webp"} 
-                            multiple={false} 
-                            onChange={(e)=>setUploadedImage(e.target.files[0])} 
-                            disabled={!!routedPost.id}/>
-                        { uploadedImage?.name || (post.imageName || 'Upload image') }
-                    </label>
-                    <button 
-                        className={`bg-button-light dark:bg-button-dark shadow-md hover:brightness-105 text-white font-bold rounded mx-auto w-full h-button transition-all uppercase disabled:opacity-20 disabled:cursor-not-allowed ${disabledButton && 'pointer-events-none'}`} 
-                        type="submit" 
-                        disabled={submittedOnce && (!post.title || !post.description || post.description.length > 300)}>
-                            <div className="relative mx-auto overflow-hidden">
-                                <h1 className="flex justify-center items-center text-textColor-dark dark:text-textColor-light">
-                                    {disabledButton
-                                        ? (<Loading />) 
-                                        : (post.hasOwnProperty('id') ? "Update" : "Post it")
-                                    } 
-                                </h1>
-                            </div>
-                    </button>
+            <motion.form initial={{ y:30, opacity: 0 }} animate={{ y:0, opacity: 1 }} className="flex flex-col shadow-md p-5 bg-container-light dark:bg-container-dark rounded" onSubmit={submitForm}>
+                <input 
+                    className={`dark:bg-background-dark dark:text-textColor-dark text-lg shadow-md rounded mb-2 p-2 placeholder:opacity-20 border-1 border-transparent dark:border-transparent focus:ring-0 focus:border-button-light dark:border-button-dark dark:focus:border-button-dark ${submittedOnce && !post.title && '!border-delete focus:!border-delete'}`} 
+                    type="text" 
+                    maxLength={80}
+                    placeholder="Title"
+                    value={post.title}
+                    onChange={e => setPost({...post, title: e.target.value})}
+                    >
+                </input>
+                <div className="dark:bg-background-dark dark:text-textColor-dark text-textColor-light text-lg shadow-md rounded p-2 border  border-button-light dark:border-button-dark">
+                    <Slate editor={editor} value={initialValue} placeholder={"Descirption"}>
+                        <Editable />
+                    </Slate>
                 </div>
+                {/* <textarea 
+                    className={`dark:bg-background-dark dark:text-textColor-dark text-textColor-light text-lg shadow-md rounded p-2 placeholder:opacity-20 border-1 border-transparent dark:border-transparent focus:ring-0 focus:border-button-light dark:focus:border-button-dark dark:border-button-dark resize-none ${submittedOnce && (!post.description || post.description.length > 300) && '!border-delete focus:!border-delete'}`}
+                    placeholder="Description"
+                    value={post.description}
+                    rows='9'
+                    onChange={event => setPost({...post, description: event.target.value})}>
+                </textarea> */}
+                <div className="h-2 text-wrapperColor">
+                    { post.description.length ? (<p className={`text-[8px] ${ post.description.length > 300 ? 'text-red-600' : '' }`}> {post.description.length}/300</p>) : '' }
+                </div>
+                <label className={`mt-3 mb-5 cursor-pointer bg-background-light dark:bg-background-dark text-textColor-light dark:text-textColor-dark rounded border  ${uploadedImage || post.imageName  ? 'border-green-500 border-double' : 'border-button-light dark:border-button-dark border-dashed'} py-5 px-2`} htmlFor="image">
+                    <input 
+                        type="file" 
+                        id='image' 
+                        className="hidden" 
+                        accept={"image/png,.jpeg,.jpg,.webp"} 
+                        multiple={false} 
+                        onChange={(e)=>setUploadedImage(e.target.files[0])} 
+                        disabled={!!routedPost.id}/>
+                    { uploadedImage?.name || (post.imageName || 'Upload image') }
+                </label>
+                <button 
+                    className={`bg-button-light dark:bg-button-dark shadow-md hover:brightness-105 text-white font-bold rounded mx-auto w-full h-button transition-all uppercase disabled:opacity-20 disabled:cursor-not-allowed ${disabledButton && 'pointer-events-none'}`} 
+                    type="submit" 
+                    disabled={submittedOnce && (!post.title || !post.description || post.description.length > 300)}>
+                        <div className="relative mx-auto overflow-hidden">
+                            <h1 className="flex justify-center items-center text-textColor-dark dark:text-textColor-light">
+                                {disabledButton
+                                    ? (<Loading />) 
+                                    : (post.hasOwnProperty('id') ? "Update" : "Post it")
+                                } 
+                            </h1>
+                        </div>
+                </button>
             </motion.form>            
     )
 } 

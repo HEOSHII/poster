@@ -50,7 +50,7 @@ export default function login() {
     return (
         <div className="relative z-20 w-3/4 mx-auto text-center shadow-lg rounded mt-10">
                 <ThemeChanger />
-                <div className={`flex w-full relative top-[3px] ${tabsStyles.containerBefore}`}>
+            {/* <div className={`flex w-full relative top-[3px] ${tabsStyles.containerBefore}`}>
                 <button 
                     className={` ${tabsStyles.main} border-r-2 ${!isRegistration ? tabsStyles.active : `${tabsStyles.deactive} translate-x-[3px]`}`} 
                     onClick={() => setRegistration(false)}>
@@ -61,9 +61,9 @@ export default function login() {
                     onClick={() => setRegistration(true)}>
                     Join now
                 </button>
-            </div>
+            </div> */}
             <div className="relative border-2 border-textColor-light bg-container-light py-10 px-4 rounded dark:border-textColor-dark dark:bg-container-dark">
-                <form className="mb-10 flex flex-col text-left">
+                {/* <form className="mb-10 flex flex-col text-left">
                     <AnimatePresence>
                         {isRegistration && (
                             <motion.label 
@@ -96,7 +96,7 @@ export default function login() {
                     </label >
                     <button initial={{y:0}} animate={{y:5}} exit={{y:0}} className="w-1/3 py-2 rounded bg-button-light dark:bg-button-dark transition-all hover:brightness-[105%] text-white mt-3">{isRegistration ? 'Sign in' : 'Log in'}</button>
             
-                </form>
+                </form> */}
                 <h3 className="font-bold mb-2">Sign in with:</h3>
                 <div className="relative z-50 flex flex-col justify-center bg-white dark:bg-background-dark rounded">
                     <button onClick={GoogleLogin} className="w-full flex justify-center items-center shadow-md py-3 rounded text-xl transition-all hover:shadow-lg hover:scale-[1.01] active:scale-[0.99]">
