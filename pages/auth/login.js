@@ -1,56 +1,56 @@
-import { FcGoogle } from "react-icons/fc"
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth"
-import { auth } from "../../utils/firebase"
-import { useRouter } from "next/router";
-import { useAuthState } from "react-firebase-hooks/auth"
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { FcGoogle } from 'react-icons/fc'
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { auth } from '../../utils/firebase'
+import { useRouter } from 'next/router'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useDispatch } from 'react-redux'
-import { changePageName } from "../../redux/actions";
-import ThemeChanger from "../../components/themeChanger";
+import { changePageName } from '../../redux/actions'
+import ThemeChanger from '../../components/themeChanger'
 
 export default function login() {
-    const dispatch = useDispatch();
+	const dispatch = useDispatch()
 
-    const route = useRouter();
-    const emptyForm = {name:'',email:'',password:''};
-    const [form, setForm] = useState(emptyForm);
-    const [isRegistration, setRegistration] = useState(false);
-    const [user, loading] = useAuthState(auth);
-        
-    //SIGN IN WITH GOOGLE 
-    const googleProvider = new GoogleAuthProvider();
+	const route = useRouter()
+	const emptyForm = { name: '', email: '', password: '' }
+	const [form, setForm] = useState(emptyForm)
+	const [isRegistration, setRegistration] = useState(false)
+	const [user, loading] = useAuthState(auth)
 
-    const GoogleLogin = async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            route.push("/");
-        } catch (error) {
-            console.error(error)
-        }
-    }
+	//SIGN IN WITH GOOGLE
+	const googleProvider = new GoogleAuthProvider()
 
-    useEffect(() => {
-        if(user) {
-            route.push('/')
-        } else {
-            dispatch(changePageName('login'))
-        }
-           
-    }, [user]);
+	const GoogleLogin = async () => {
+		try {
+			const result = await signInWithPopup(auth, googleProvider)
+			route.push('/')
+		} catch (error) {
+			console.error(error)
+		}
+	}
 
-    // ADDITIONAL STYLES
-    const tabsStyles = {
-        main: 'rounded-t font-bold border-2 border-t-2 border-textColor-light flex-1 p-2 hover:opacity-100 dark:border-textColor-dark',
-        active: 'bg-container-light border-b-0 z-10 rounded-t dark:bg-container-dark',
-        deactive: 'bg-backgdround-light translate-y-[3px] text-sm opacity-90',
-        containerBefore: "before:absolute before:content-[''] before:h-[3px] before:w-3/4 before:bg-container-light dark:before:bg-container-dark before:z-50 before:bottom-[-2px] before:left-2 before:pointer-events-none",
-    }
+	useEffect(() => {
+		if (user) {
+			route.push('/')
+		} else {
+			dispatch(changePageName('login'))
+		}
+	}, [user])
 
-    return (
-        <div className="relative z-20 w-3/4 mx-auto text-center shadow-lg rounded mt-10">
-                <ThemeChanger />
-            {/* <div className={`flex w-full relative top-[3px] ${tabsStyles.containerBefore}`}>
+	// ADDITIONAL STYLES
+	const tabsStyles = {
+		main: 'rounded-t font-bold border-2 border-t-2 border-textColor-light flex-1 p-2 hover:opacity-100 dark:border-textColor-dark',
+		active: 'bg-container-light border-b-0 z-10 rounded-t dark:bg-container-dark',
+		deactive: 'bg-backgdround-light translate-y-[3px] text-sm opacity-90',
+		containerBefore:
+			"before:absolute before:content-[''] before:h-[3px] before:w-3/4 before:bg-container-light dark:before:bg-container-dark before:z-50 before:bottom-[-2px] before:left-2 before:pointer-events-none",
+	}
+
+	return (
+		<div className="relative z-20 w-3/4 mx-auto text-center shadow-lg rounded mt-10">
+			<ThemeChanger />
+			{/* <div className={`flex w-full relative top-[3px] ${tabsStyles.containerBefore}`}>
                 <button 
                     className={` ${tabsStyles.main} border-r-2 ${!isRegistration ? tabsStyles.active : `${tabsStyles.deactive} translate-x-[3px]`}`} 
                     onClick={() => setRegistration(false)}>
@@ -62,8 +62,8 @@ export default function login() {
                     Join now
                 </button>
             </div> */}
-            <div className="relative border-2 border-textColor-light bg-container-light py-10 px-4 rounded dark:border-textColor-dark dark:bg-container-dark">
-                {/* <form className="mb-10 flex flex-col text-left">
+			<div className="relative border-2 border-textColor-light bg-container-light py-10 px-4 rounded dark:border-textColor-dark dark:bg-container-dark">
+				{/* <form className="mb-10 flex flex-col text-left">
                     <AnimatePresence>
                         {isRegistration && (
                             <motion.label 
@@ -97,13 +97,17 @@ export default function login() {
                     <button initial={{y:0}} animate={{y:5}} exit={{y:0}} className="w-1/3 py-2 rounded bg-button-light dark:bg-button-dark transition-all hover:brightness-[105%] text-white mt-3">{isRegistration ? 'Sign in' : 'Log in'}</button>
             
                 </form> */}
-                <h3 className="font-bold mb-2">Sign in with:</h3>
-                <div className="relative z-50 flex flex-col justify-center bg-white dark:bg-background-dark rounded">
-                    <button onClick={GoogleLogin} className="w-full flex justify-center items-center shadow-md py-3 rounded text-xl transition-all hover:shadow-lg hover:scale-[1.01] active:scale-[0.99]">
-                        <FcGoogle size={30}/>oogle
-                    </button>
-                </div>
-            </div>
-        </div>
-    )
+				<h3 className="font-bold mb-2">Sign in with:</h3>
+				<div className="relative z-50 flex flex-col justify-center bg-white dark:bg-background-dark rounded">
+					<button
+						onClick={GoogleLogin}
+						className="w-full flex justify-center items-center shadow-md py-3 rounded text-xl transition-all hover:shadow-lg hover:scale-[1.01] active:scale-[0.99]"
+					>
+						<FcGoogle size={30} />
+						oogle
+					</button>
+				</div>
+			</div>
+		</div>
+	)
 }
